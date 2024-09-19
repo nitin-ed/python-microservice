@@ -15,10 +15,11 @@ server.config["MYSQL_PASSWORD"] = os.environ.get("MYSQL_PASSWORD")
 server.config["MYSQL_DB"] = os.environ.get("MYSQL_DB")
 server.config["MYSQL_PORT"] = os.environ.get("MYSQL_PORT")
 
+
 # Route for Login
 @server.route("/login", methods=["POST"])
 def login():
-     # Get the Authorization header from the request
+    # Get the Authorization header from the request
     auth = request.authorization
     if not auth:
         return "Missing Credentials", 401
@@ -41,12 +42,13 @@ def login():
             return "Invalid Credentials", 401
         else:
             return createJWT(auth.username, os.environ.get("JWT_SECRET"), True)
-        
+
     else:
         return "Invalid Credentials", 401
 
+
 # Route for JWT validation
-@server.route("./validate", method=["POST"])
+@server.route("/validate", methods=["POST"])
 def validate():
     encoded_jwt = request.headers["Authorization"]
 
@@ -66,6 +68,25 @@ def validate():
 
     return decoded, 200
 
+
+# Creates a new user in the db and returns the JWT token for auth
+@server.route("/create-user", methods=["POST"])
+def createUserAndGetJwtToken():
+
+    # Access request body
+    username = request.form.get("username")
+    password = request.form.get("password")
+
+    # Add username and password to DB
+    cur = mysql.connection.cursor()
+    res = cur.execute(
+        "INSERT INTO user(email, password) VALUES (%s, %s)", (username, password)
+    )
+
+    # Return JWT token
+    return createJWT(username, os.environ.get("JWT_SECRET"), True)
+
+
 # Function to create a JWT token
 def createJWT(username, secret, authz):
     return jwt.encode(
@@ -79,6 +100,7 @@ def createJWT(username, secret, authz):
         secret,
         algorithm="HS256",
     )
+
 
 # Entry Point
 if __name__ == "__main__":

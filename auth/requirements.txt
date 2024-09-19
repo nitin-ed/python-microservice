@@ -112,3 +112,6 @@ webcolors==1.13
 webencodings==0.5.1
 websocket-client==1.7.0
 widgetsnbextension==4.0.9
+pyjwt==2.9.0
+flask==3.0.3
+flask-mysqldb>=0.2.0

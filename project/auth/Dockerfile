@@ -10,16 +10,17 @@ ENV MYSQL_DB=""
 ENV MYSQL_PORT=""
 
 # Install dependencies for mysqlclient
-RUN apt-get update && \
-    apt-get install -y default-libmysqlclient-dev build-essential pkg-config && \
-    apt-get clean
+# RUN apt-get update && \
+#     apt-get install -y default-libmysqlclient-dev build-essential pkg-config && \
+#     apt-get clean
 
 # LAYER 2 :
 RUN apt-get update \
     && apt-get install -y --no-install-recommends --no-install-suggests \
        build-essential \
        default-libmysqlclient-dev \
-       libsqlite3-dev \  
+       libsqlite3-dev \
+       pkg-config \  
     && pip install --no-cache-dir --upgrade pip
 
 # LAYER 3 :

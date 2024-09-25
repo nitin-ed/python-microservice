@@ -21,7 +21,6 @@ def get_all_users():
     auth = request.authorization
     if not auth:
         return "Missing Credentials", 401
-
     try:
         cur = mysql.connection.cursor()
         cur.execute("SELECT * FROM Users")

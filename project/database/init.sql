@@ -1,5 +1,9 @@
 -- init.sql
-CREATE DATABASE IF NOT EXISTS auth_db;
+CREATE USER 'admin'@'localhost' IDENTIFIED BY 'admin_123';
+
+CREATE DATABASE auth_db;
+
+GRANT ALL PRIVILEGES ON auth.* TO 'admin'@'localhost';
 
 USE auth_db;
 
